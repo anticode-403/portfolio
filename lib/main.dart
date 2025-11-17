@@ -129,28 +129,16 @@ class _PortfolioState extends State<Portfolio> {
     return videoIds.map((e) => VideoCard(e)).toList();
   }
 
-  Column getCuratedRepoCards(Orientation orientation) {
+  List<RepoCard> getCuratedRepoCards() {
     List<RepoData> curatedRepoCards = <RepoData>[
+      const RepoData('My GitHub', 'Find all the rest of my public software development projects here!', 'https://github.com/anticode-403'),
       const RepoData('ABCO', 'A Minecraft mod that expands and overhauls many of the features added by the Better Combat mod.', 'https://github.com/anticode-403/antis-Better-Combat-Overhauls'),
       const RepoData('Astro Reforged', 'A completely redesigned and remade version of the Astro! mod by Prismatica.', 'https://github.com/anticode-403/astro_reforged'),
       const RepoData('Compositor Pro', 'A Blender add-on focused on adding features and utilities to the Blender Compositor.', 'https://github.com/anticode-403/compositor_pro'),
       const RepoData('Portfolio Website', 'A Flutter-based website designed to show-off various projects I\'ve worked on.', 'https://github.com/anticode-403/portfolio')
     ];
     // Normally, embedding would be the better way to do this, but I'm doing it this way to curate specifically which repos get displayed AND what description gets shown.
-    List<Row> rows = <Row>[];
-    for (List<RepoData> dataChunk in curatedRepoCards.slices(orientation == Orientation.portrait ? 2 : 4)) {
-      List<RepoCard> chunk = <RepoCard>[];
-      for (RepoData data in dataChunk) {
-        chunk.add(RepoCard(data, orientation == Orientation.portrait));
-      }
-      rows.add(Row(
-        children: chunk,
-      ));
-    }
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: rows
-    );
+    return curatedRepoCards.map((e) => RepoCard(e)).toList();
   }
 
   @override
@@ -162,7 +150,11 @@ class _PortfolioState extends State<Portfolio> {
           body: ListView(
             children: <Widget>[
               const Padding(padding: EdgeInsets.all(16), child: Text('Software Development', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold))),
-              getCuratedRepoCards(orientation),
+              StaggeredGrid.count(
+                crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
+                axisDirection: AxisDirection.down,
+                children: getCuratedRepoCards(),
+              ),
               const SizedBox(height: 8),
               const Padding(padding: EdgeInsets.all(16), child: Text('Video Projects', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold))),
               StaggeredGrid.count(

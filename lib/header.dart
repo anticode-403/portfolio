@@ -21,19 +21,6 @@ AppBar portfolioAppBarBuilder(BuildContext context, Orientation orientation, {Fu
       onPressed: () => context.go('/'),
     ),
     actions: [
-      // Padding(
-      //   padding: const EdgeInsets.only(right: 16),
-      //   child: TextButton(
-      //     child: const Text(
-      //       'Programming Projects',
-      //       style: TextStyle(
-      //         color: Colors.white,
-      //         fontSize: 20,
-      //       ),
-      //     ),
-      //     onPressed: () => launchUrlString('https://www.patreon.com/anticode_403'),
-      //   ),
-      // ),
       Padding(
         padding: const EdgeInsets.only(right: 16),
         child: TextButton(
@@ -57,18 +44,6 @@ AppBar portfolioAppBarBuilder(BuildContext context, Orientation orientation, {Fu
             ),
           ),
           onPressed: () => launchUrlString('https://gumroad.anticode.me/'),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(right: 16),
-        child: TextButton(
-          child: Text(orientation == Orientation.portrait ? 'GH' : 'GitHub',
-          style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-            ),
-          ),
-          onPressed: () => launchUrlString('https://github.com/anticode-403'),
         ),
       ),
     ]
