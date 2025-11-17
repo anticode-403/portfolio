@@ -1,11 +1,12 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:portfolio/repo_card.dart';
-import 'package:portfolio/video_card.dart';
 import 'firebase_options.dart';
 
 import 'package:collection/collection.dart';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
@@ -14,6 +15,9 @@ import './header.dart';
 import './image_card.dart';
 import './image_preview.dart';
 import './image_data.dart';
+import './repo_card.dart';
+import './repo_data.dart';
+import './video_card.dart';
 
 final _router = GoRouter(
   routes: [
@@ -28,8 +32,10 @@ final _router = GoRouter(
   ]
 );
 
-class ImageState {
+class FirebaseState {
   static List<ImageData> images = <ImageData>[];
+  static List<String> videoIds = <String>[];
+  static List<RepoData> repos = <RepoData>[];
 
   static ImageData? getImage(String name) {
     for (ImageData image in images) {
@@ -74,13 +80,27 @@ class Portfolio extends StatefulWidget {
 class _PortfolioState extends State<Portfolio> {
   final storage = FirebaseStorage.instance.ref();
   List<ImageData> images = <ImageData>[];
+  // List<RepoData> repos = <RepoData>[];
+  List<String> videoIds = <String>[];
 
   _PortfolioState() {
-    if (ImageState.images.isNotEmpty) {
-      images = ImageState.images;
+    if (FirebaseState.images.isNotEmpty) {
+      images = FirebaseState.images;
     }
     else {
       getImages();
+    }
+    // if (FirebaseState.repos.isNotEmpty) {
+    //   repos = FirebaseState.repos;
+    // }
+    // else {
+      
+    // }
+    if (FirebaseState.videoIds.isNotEmpty) {
+      videoIds = FirebaseState.videoIds;
+    }
+    else {
+      getVideos();
     }
   }
 
@@ -93,26 +113,39 @@ class _PortfolioState extends State<Portfolio> {
     });
   }
 
-  List<Widget> getImageCards() {
+  void getVideos() async {
+    Uint8List? baseVideoData = await storage.child('videos.txt').getData();
+    if (baseVideoData == null) return;
+    setState(() {
+      videoIds = const Utf8Codec().decode(baseVideoData).split('\n');
+    });
+  }
+
+  List<Widget> getVFXCards() {
     List<Widget> imagesMap = images.map((e) => ImageCard(e)).toList();
     List<Widget> cards = <Widget>[];
-    cards.insert(0, const VideoCard('ArOQApNu9HU')); // Inserting video cards manually
-    cards.insert(0, const VideoCard('TIFAMFn0Y40'));
+    for (String videoId in videoIds) {
+      cards.insert(0, VideoCard(videoId));
+    }
     cards.addAll(imagesMap);
 
     return cards;
   }
 
   Column getCuratedRepoCards(Orientation orientation) {
-    List<RepoCard> curatedRepoCards = <RepoCard>[
-      RepoCard('ABCO', 'A Minecraft mod that expands and overhauls many of the features added by the Better Combat mod.', 'https://github.com/anticode-403/antis-Better-Combat-Overhauls', orientation == Orientation.portrait),
-      RepoCard('Astro Reforged', 'A completely redesigned and remade version of the Astro! mod by Prismatica.', 'https://github.com/anticode-403/astro_reforged', orientation == Orientation.portrait),
-      RepoCard('Compositor Pro', 'A Blender add-on focused on adding features and utilities to the Blender Compositor.', 'https://github.com/anticode-403/compositor_pro', orientation == Orientation.portrait),
-      RepoCard('Portfolio Website', 'A Flutter-based website designed to show-off various projects I\'ve worked on.', 'https://github.com/anticode-403/portfolio', orientation == Orientation.portrait)
+    List<RepoData> curatedRepoCards = <RepoData>[
+      const RepoData('ABCO', 'A Minecraft mod that expands and overhauls many of the features added by the Better Combat mod.', 'https://github.com/anticode-403/antis-Better-Combat-Overhauls'),
+      const RepoData('Astro Reforged', 'A completely redesigned and remade version of the Astro! mod by Prismatica.', 'https://github.com/anticode-403/astro_reforged'),
+      const RepoData('Compositor Pro', 'A Blender add-on focused on adding features and utilities to the Blender Compositor.', 'https://github.com/anticode-403/compositor_pro'),
+      const RepoData('Portfolio Website', 'A Flutter-based website designed to show-off various projects I\'ve worked on.', 'https://github.com/anticode-403/portfolio')
     ];
     // Normally, embedding would be the better way to do this, but I'm doing it this way to curate specifically which repos get displayed AND what description gets shown.
     List<Row> rows = <Row>[];
-    for (List<RepoCard> chunk in curatedRepoCards.slices(orientation == Orientation.portrait ? 2 : 4)) {
+    for (List<RepoData> dataChunk in curatedRepoCards.slices(orientation == Orientation.portrait ? 2 : 4)) {
+      List<RepoCard> chunk = <RepoCard>[];
+      for (RepoData data in dataChunk) {
+        chunk.add(RepoCard(data, orientation == Orientation.portrait));
+      }
       rows.add(Row(
         children: chunk,
       ));
@@ -138,7 +171,7 @@ class _PortfolioState extends State<Portfolio> {
                 mainAxisSpacing: 6,
                 crossAxisSpacing: 6,
                 axisDirection: AxisDirection.down,
-                children: getImageCards(),
+                children: getVFXCards(),
               ),
             ],
           )

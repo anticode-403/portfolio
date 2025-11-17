@@ -37,14 +37,14 @@ class _ImagePreviewState extends State<ImagePreview> {
     super.initState();
     String? imageName = widget.imageId;
     if (imageName == null) return;
-    if (ImageState.images.isEmpty || ImageState.getImage(imageName) == null) {
+    if (FirebaseState.images.isEmpty || FirebaseState.getImage(imageName) == null) {
       isLoading = true;
       imageData = ImageData(imageName);
       getImage();
       return;
     }
     else {
-      ImageData? fetchedImage = ImageState.getImage(imageName);
+      ImageData? fetchedImage = FirebaseState.getImage(imageName);
       if (fetchedImage != null) {
         imageData = fetchedImage;
       }

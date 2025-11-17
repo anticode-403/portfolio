@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:portfolio/repo_data.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class RepoCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final String link;
+  final RepoData data;
   final bool doublesize;
 
-  const RepoCard(this.title, this.description, this.link, this.doublesize, {super.key});
+  const RepoCard(this.data, this.doublesize, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,20 +27,20 @@ class RepoCard extends StatelessWidget {
                       const FaIcon(FontAwesomeIcons.github),
                       const SizedBox(width: 8),
                       Text(
-                        title,
+                        data.title,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                         softWrap: true,
                       ),
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Text(description),
+                  Text(data.description),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
                         child: const Text('Go'),
-                        onPressed: () => launchUrlString(link),
+                        onPressed: () => launchUrlString(data.link),
                       ),
                     ],
                   ),
