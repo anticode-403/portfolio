@@ -108,7 +108,7 @@ class _PortfolioState extends State<Portfolio> {
       RepoCard('ABCO', 'A Minecraft mod that expands and overhauls many of the features added by the Better Combat mod.', 'https://github.com/anticode-403/antis-Better-Combat-Overhauls', orientation == Orientation.portrait),
       RepoCard('Astro Reforged', 'A completely redesigned and remade version of the Astro! mod by Prismatica.', 'https://github.com/anticode-403/astro_reforged', orientation == Orientation.portrait),
       RepoCard('Compositor Pro', 'A Blender add-on focused on adding features and utilities to the Blender Compositor.', 'https://github.com/anticode-403/compositor_pro', orientation == Orientation.portrait),
-      RepoCard('Portfolio Website', 'A Flutter-based website designed ', '', orientation == Orientation.portrait)
+      RepoCard('Portfolio Website', 'A Flutter-based website designed to show-off various projects I\'ve worked on.', 'https://github.com/anticode-403/portfolio', orientation == Orientation.portrait)
     ];
     // Normally, embedding would be the better way to do this, but I'm doing it this way to curate specifically which repos get displayed AND what description gets shown.
     List<Row> rows = <Row>[];
