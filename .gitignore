@@ -12,6 +12,8 @@ lib/firebase_options.dart
 .history
 .svn/
 migrate_working_dir/
+.vscode/
+.firebase/
 
 # IntelliJ related
 *.iml
