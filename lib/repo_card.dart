@@ -6,9 +6,9 @@ class RepoCard extends StatelessWidget {
   final String title;
   final String description;
   final String link;
-  bool doublesize;
+  final bool doublesize;
 
-  RepoCard(this.title, this.description, this.link, this.doublesize, {super.key});
+  const RepoCard(this.title, this.description, this.link, this.doublesize, {super.key});
 
   @override
   Widget build(BuildContext context) {
