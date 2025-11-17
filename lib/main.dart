@@ -121,15 +121,12 @@ class _PortfolioState extends State<Portfolio> {
     });
   }
 
-  List<Widget> getVFXCards() {
-    List<Widget> imagesMap = images.map((e) => ImageCard(e)).toList();
-    List<Widget> cards = <Widget>[];
-    for (String videoId in videoIds) {
-      cards.insert(0, VideoCard(videoId));
-    }
-    cards.addAll(imagesMap);
+  List<Widget> getImageCards() {
+    return images.map((e) => ImageCard(e)).toList();
+  }
 
-    return cards;
+  List<Widget> getVideoCards() {
+    return videoIds.map((e) => VideoCard(e)).toList();
   }
 
   Column getCuratedRepoCards(Orientation orientation) {
@@ -164,14 +161,25 @@ class _PortfolioState extends State<Portfolio> {
           appBar: portfolioAppBarBuilder(context, orientation),
           body: ListView(
             children: <Widget>[
+              const Padding(padding: EdgeInsets.all(16), child: Text('Software Development', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold))),
               getCuratedRepoCards(orientation),
               const SizedBox(height: 8),
+              const Padding(padding: EdgeInsets.all(16), child: Text('Video Projects', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold))),
               StaggeredGrid.count(
                 crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
                 mainAxisSpacing: 6,
                 crossAxisSpacing: 6,
                 axisDirection: AxisDirection.down,
-                children: getVFXCards(),
+                children: getVideoCards(),
+              ),
+              const SizedBox(height: 8),
+              const Padding(padding: EdgeInsets.all(16), child: Text('Art Pieces', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold))),
+              StaggeredGrid.count(
+                crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
+                mainAxisSpacing: 6,
+                crossAxisSpacing: 6,
+                axisDirection: AxisDirection.down,
+                children: getImageCards(),
               ),
             ],
           )
